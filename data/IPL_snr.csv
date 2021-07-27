@@ -1,0 +1,17 @@
+pair_id,song_pair_id,song,songtype,snr
+1,1,NHSDiscography-021,Lullaby,34.39
+2,2,NHSDiscography-009,Lullaby,58.87
+3,3,NHSDiscography-099,Lullaby,33.11
+4,4,NHSDiscography-093,Lullaby,46.7
+5,5,NHSDiscography-101,Lullaby,31.61
+6,6,NHSDiscography-111,Lullaby,41.83
+7,7,NHSDiscography-095,Lullaby,59.49
+8,8,NHSDiscography-043,Lullaby,45.24
+1,1,NHSDiscography-026,Non-lullaby,31.15
+2,2,NHSDiscography-097,Non-lullaby,36.91
+3,3,NHSDiscography-078,Non-lullaby,21.86
+4,4,NHSDiscography-018,Non-lullaby,48.81
+5,5,NHSDiscography-104,Non-lullaby,31.2
+6,6,NHSDiscography-081,Non-lullaby,22.07
+7,7,NHSDiscography-094,Non-lullaby,19.91
+8,8,NHSDiscography-023,Non-lullaby,30.32
