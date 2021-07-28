@@ -1,4 +1,6 @@
 # exact confidence intervals for medians
+# Campbell, M., J. & Gardner, M. J. Statistics in Medicine: Calculating confidence intervals for some non-parametric analyses. Br. Med. J. 296(6634), 1454–1456 (1988).
+
 med_confint <- function(x, al, verbose) {
   q <- 1 - al
   n <- length(x)
