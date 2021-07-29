@@ -15,6 +15,8 @@ source("./med_confint_e.R")
 # fig : subjective rate violinplots
 ylab <- expression(paste("Subjective rating of audio quality"))
 title2a <- expression(bold("a"))
+pj <- position_jitter(height = .1, width = .1, seed = 6012)
+
 figobj <- ggplot(
   data = sr_table,
   aes(
@@ -29,23 +31,17 @@ figobj <- ggplot(
     size = .5
   ) +
   geom_violin(aes(fill = songtype),
-              trim = FALSE,
+              trim = TRUE,
               alpha = .8
   ) +
   scale_fill_manual(values = c("blue", "red")) +
   geom_line(aes(group = pair_id),
-            position = position_jitter(
-              width = .025,
-              seed = 6012
-            ),
+            position = pj,
             alpha = .1
   ) +
   geom_point(
     aes(y = rating),
-    position = position_jitter(
-      width = .025,
-      seed = 6012
-    ),
+    position = pj,
     size = 1.1,
     pch = 21,
     fill = "white"
@@ -60,6 +56,7 @@ figobj <- ggplot(
      size = 0.4
   ) +
   scale_x_discrete(labels = c("Lullaby", "Non-lullaby")) +
+  scale_y_continuous(breaks = 1:8, labels = as.character(1:8)) + 
   theme_bw() +
   theme(
     axis.text = element_text(colour = "black", size = 10),
