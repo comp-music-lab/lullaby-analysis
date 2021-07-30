@@ -139,7 +139,7 @@ d_R <- cohensD(x = likscale$aq_l, y = likscale$aq_nl, method = "paired")
 cat(sprintf("R's lsr package: %e vs. %e (diff is %e)\n", d_paired, d_R, d_paired - d_R))
 
 # Comparison with R's function
-rho_R <- cor(likscale$aq_l, likscale$aq_nl)
+rho_R <- cor(x = likscale$aq_l, y = likscale$aq_nl)
 cat(sprintf("R's cor function: %e vs. %e (diff is %e)\n", rho, rho_R, rho - rho_R))
 
 # Comparison with R's function
