@@ -15,6 +15,7 @@ rm(list = ls())
 
 # load libraries
 library(ggplot2)
+library(lsr)
 
 # get data
 T <- read.csv("../data/IPL_sr.csv", header = TRUE, sep = ",", quote = "")
@@ -22,12 +23,13 @@ T <- read.csv("../data/IPL_sr.csv", header = TRUE, sep = ",", quote = "")
 # convert into composite scores - use it for effect size calculation
 P <- unique(T$participant)
 likscale <- data.frame(participant = character(), aq_l = numeric(), aq_nl = numeric()) 
+NUM_SONG <- 8
 
 for (i in 1:length(P)) {
   aq_l_i <- T[T$participant == P[i] & T$songtype == "Lullaby", ]$rating
   aq_nl_i <- T[T$participant == P[i] & T$songtype == "Non-lullaby", ]$rating
   
-  if (!(length(aq_l_i) == 8 && length(aq_nl_i) == 8)) {
+  if (!(length(aq_l_i) == NUM_SONG && length(aq_nl_i) == NUM_SONG)) {
     print("Data is not properlly prepared!")
     return()
   }
@@ -35,8 +37,8 @@ for (i in 1:length(P)) {
   likscale[i, ] <- list(P[i], sum(aq_l_i), sum(aq_nl_i))
 }
 
-likscale$aq_l <- likscale$aq_l/length(P)
-likscale$aq_nl <- likscale$aq_nl/length(P)
+likscale$aq_l <- likscale$aq_l/NUM_SONG
+likscale$aq_nl <- likscale$aq_nl/NUM_SONG
 
 # reshaping for the ease of ggplot
 likscale_plot <- rbind(
@@ -47,6 +49,7 @@ likscale_plot <- rbind(
 # fig : subjective rate violinplots (composite score version)
 ylab <- expression(paste("Subjective rating of audio quality"))
 title2a <- expression(bold("a"))
+pj = position_jitter(width = .025, seed = 4000)
 
 figobj <- ggplot(
   data = likscale_plot,
@@ -67,10 +70,12 @@ figobj <- ggplot(
   ) +
   scale_fill_manual(values = c("blue", "red")) +
   geom_line(aes(group = participant),
+            position = pj,
             alpha = .1
   ) +
   geom_point(
     aes(y = rating),
+    position = pj,
     size = 1.1,
     pch = 21,
     fill = "white"
@@ -103,7 +108,7 @@ plot(figobj)
 ggsave("./figure/violinplot_sr_agg.png", plot = figobj, width = 2.8, height = 4)
 
 # effect size - Hedge's g
-N <- length(likscale$participant)
+N <- length(P)
 M_1 <- sum(likscale$aq_l)/N
 M_2 <- sum(likscale$aq_nl)/N
 var_1 <- sum((likscale$aq_l - M_1)^2)/(N - 1)
@@ -128,3 +133,15 @@ d_rm <- d_paired * sqrt(2*(1 - rho))
 
 # 
 cat(sprintf("Hedge's g = %3.3f (%3.3f), unequal variance paired data = %3.3f (%3.3f)\n", g, g_bc, d_paired, d_rm))
+
+# Comparison with R's package (unnormalized version)
+d_R <- cohensD(x = likscale$aq_l, y = likscale$aq_nl, method = "paired")
+cat(sprintf("R's lsr package: %e vs. %e (diff is %e)\n", d_paired, d_R, d_paired - d_R))
+
+# Comparison with R's function
+rho_R <- cor(likscale$aq_l, likscale$aq_nl)
+cat(sprintf("R's cor function: %e vs. %e (diff is %e)\n", rho, rho_R, rho - rho_R))
+
+# Comparison with R's function
+d_rm_R <- d_R * sqrt(2*(1 - rho))
+cat(sprintf("R's package: %e vs. %e (diff is %e)\n", d_rm, d_rm_R, d_rm - d_rm_R))
