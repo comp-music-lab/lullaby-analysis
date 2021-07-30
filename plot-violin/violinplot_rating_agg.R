@@ -7,7 +7,7 @@
 # Lakens, D. (2013). Calculating and reporting effect sizes to facilitate cumulative science: a practical primer for t-tests and ANOVAs. Front Psychol. 4, 863.
 #
 # ---normally distributed paired data (unequal variance)---
-# Dunlap, W. P., Cortina, J. M., Vaslow, J. B., & Burke, M. J. (1996). Meta-analysis of experiments with matched groups or repeated measures designs. Psychological Methods, 1(2), 170???177.
+# Dunlap, W. P., Cortina, J. M., Vaslow, J. B., & Burke, M. J. (1996). Meta-analysis of experiments with matched groups or repeated measures designs. Psychological Methods, 1(2), 170-177.
 # Lakens, D. (2013). Calculating and reporting effect sizes to facilitate cumulative science: a practical primer for t-tests and ANOVAs. Front Psychol. 4, 863.
 
 # Clear variables
@@ -95,7 +95,7 @@ figobj <- ggplot(
     legend.position = "n"
   ) +
   ylab(ylab) +
-  xlab("")
+  xlab("") +
   ggtitle(title2a)
 
 # save figure
