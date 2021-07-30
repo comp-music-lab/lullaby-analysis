@@ -3,28 +3,26 @@
 library(ggpubr)
 library(lsr)
 
-d<-read.csv("../data/AudioQuality.csv")
-#d$LullabyQuality<-mean(d$LullabyQualityES,d$LullabyQualityPP)
-#d$NonLullabyQuality<-rowMeans(d[,c(18,20)])
+d<-read.csv("AudioQualityRaterMeans.csv")
 
-#Compare subjective audio quality (1-7 Likert scale - preliminary data from Pat)
-ggpaired(d, cond1 = "LullabyQuality", cond2 = "NonLullabyQuality", fill = "condition", palette = "jco")
-cohensD( x = d$LullabyQuality, y = d$NonLullabyQuality, method = "paired")
-#[1] 0.5400617
-t.test(x = d$LullabyQuality, y = d$NonLullabyQuality, method = "paired")
-#t = 1.372, df = 13.453, p-value = 0.1925
+#Compare subjective audio quality (1-8 Likert scale)
+ggpaired(d, cond1 = "MeanLullabyQuality", cond2 = "MeanNonLullabyQuality", fill = "condition", palette = "jco")
+cohensD( x = d$MeanLullabyQuality, y = d$MeanNonLullabyQuality, method = "paired")
+#[1] 0.8416851
+t.test(x = d$MeanLullabyQuality, y = d$MeanNonLullabyQuality, paired = TRUE)
+#t = 2.6616, df = 9, p-value = 0.02598
 
 #Compare automated audio quality (signal-noise ratio)
-
+d<-read.csv("AudioQuality.csv")
 ggpaired(d, cond1 = "SNRLullaby", cond2 = "SNRNonLullaby", fill = "condition", palette = "jco")
 cohensD( x = d$SNRLullaby, y = d$SNRNonLullaby, method = "paired")
-#[1] 0.3484813
-t.test(x = d$SNRLullaby, y = d$SNRNonLullaby, method = "paired")
-#t = 1.0074, df = 11.986, p-value = 0.3336
+#0.99298
+t.test(x = d$SNRLullaby, y = d$SNRNonLullaby, paired = TRUE)
+#t = 2.8086, df = 7, p-value = 0.0262
 
 #Replicate Bainbridge et al. analysis, adding calculation of pre-registered effect size
 
-hr <- read.csv("../data/IPL_hr_clean.csv")
+hr <- read.csv("IPL_hr_clean.csv")
 
 # mean-based analyses
 hr_lul_means <- hr %>%

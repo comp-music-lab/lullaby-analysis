@@ -9,5 +9,5 @@ Run ./analysis-effectsize/LullabyAudio.R (R)
 Run ./analysis-snr/analysis_snr.m (Matlab)
 
 ## Violin plot figure
-Run ./plot-violin/violinplot_rating.R (R)
+Run ./plot-violin/violinplot_rating_agg.R (R)
     ./plot-violin/violinplot_snr.R (R)
