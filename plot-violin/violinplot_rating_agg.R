@@ -1,15 +1,3 @@
-# Effect size references
-#
-# ---Hedge's g / Bias-adjusted Hedge's g---
-# Grissom, R. J., & Kim, J. J. (2012). Effect sizes for research: Univariate and multivariate applications (2nd ed.). New York, NY: Routledge.
-# Hedges, L. V. (1981). Distribution theory for Glass's estimator of effect size and related estimators. Journal of Educational Statistics, 6(2), 107-128.
-# Hedges, L. V., & Olkin, I. (1985). Statistical methods for meta-analysis. San Diego, CA: Academic Press.
-# Lakens, D. (2013). Calculating and reporting effect sizes to facilitate cumulative science: a practical primer for t-tests and ANOVAs. Front Psychol. 4, 863.
-#
-# ---normally distributed paired data (unequal variance)---
-# Dunlap, W. P., Cortina, J. M., Vaslow, J. B., & Burke, M. J. (1996). Meta-analysis of experiments with matched groups or repeated measures designs. Psychological Methods, 1(2), 170-177.
-# Lakens, D. (2013). Calculating and reporting effect sizes to facilitate cumulative science: a practical primer for t-tests and ANOVAs. Front Psychol. 4, 863.
-
 # Clear variables
 rm(list = ls())
 
@@ -20,7 +8,7 @@ library(lsr)
 # get data
 T <- read.csv("../data/IPL_sr.csv", header = TRUE, sep = ",", quote = "")
 
-# convert into composite scores - use it for effect size calculation
+# convert into composite scores
 P <- unique(T$participant)
 likscale <- data.frame(participant = character(), aq_l = numeric(), aq_nl = numeric()) 
 NUM_SONG <- 8
@@ -106,42 +94,3 @@ figobj <- ggplot(
 # save figure
 plot(figobj)
 ggsave("./figure/violinplot_sr_agg.png", plot = figobj, width = 2.8, height = 4)
-
-# effect size - Hedge's g
-N <- length(P)
-M_1 <- sum(likscale$aq_l)/N
-M_2 <- sum(likscale$aq_nl)/N
-var_1 <- sum((likscale$aq_l - M_1)^2)/(N - 1)
-var_2 <- sum((likscale$aq_nl - M_2)^2)/(N - 1)
-var_p <- ((N - 1)*var_1 + (N - 1)*var_2)/(N + N - 2)
-g <- (M_1 - M_2)/sqrt(var_p)
-
-# effect size - bias corrected Hedge's g
-al <- N + N - 2
-J <- gamma(al/2)/(sqrt(al/2) * gamma((al - 1)/2))
-g_bc <- J*g
-
-# effect size - normally distributed paired data (unequal variance)
-M_d <- sum(likscale$aq_l - likscale$aq_nl)/N
-cov_d <- sum((likscale$aq_l - M_1)*(likscale$aq_nl - M_2))/(N - 1)
-var_d <- var_1 + var_2 - 2*cov_d
-d_paired <- M_d/sqrt(var_d)
-
-# effect size - normally distributed paired data (unequal variance) with correlation normalization
-rho <- sum((likscale$aq_l - M_1)*(likscale$aq_nl - M_2))/sqrt(sum((likscale$aq_l - M_1)^2) * sum((likscale$aq_nl - M_2)^2))
-d_rm <- d_paired * sqrt(2*(1 - rho))
-
-# 
-cat(sprintf("Hedge's g = %3.3f (%3.3f), unequal variance paired data = %3.3f (%3.3f)\n", g, g_bc, d_paired, d_rm))
-
-# Comparison with R's package (unnormalized version)
-d_R <- cohensD(x = likscale$aq_l, y = likscale$aq_nl, method = "paired")
-cat(sprintf("R's lsr package: %e vs. %e (diff is %e)\n", d_paired, d_R, d_paired - d_R))
-
-# Comparison with R's function
-rho_R <- cor(x = likscale$aq_l, y = likscale$aq_nl)
-cat(sprintf("R's cor function: %e vs. %e (diff is %e)\n", rho, rho_R, rho - rho_R))
-
-# Comparison with R's function
-d_rm_R <- d_R * sqrt(2*(1 - rho))
-cat(sprintf("R's package: %e vs. %e (diff is %e)\n", d_rm, d_rm_R, d_rm - d_rm_R))
