@@ -3,7 +3,7 @@
 library(ggpubr)
 library(lsr)
 
-d<-read.csv("AudioQualityRaterMeans.csv")
+d<-read.csv("../data/AudioQualityRaterMeans.csv")
 
 #Compare subjective audio quality (1-8 Likert scale)
 ggpaired(d, cond1 = "MeanLullabyQuality", cond2 = "MeanNonLullabyQuality", fill = "condition", palette = "jco")
@@ -13,7 +13,7 @@ t.test(x = d$MeanLullabyQuality, y = d$MeanNonLullabyQuality, paired = TRUE)
 #t = 2.6616, df = 9, p-value = 0.02598
 
 #Compare automated audio quality (signal-noise ratio)
-d<-read.csv("AudioQuality.csv")
+d<-read.csv("../data/AudioQuality.csv")
 ggpaired(d, cond1 = "SNRLullaby", cond2 = "SNRNonLullaby", fill = "condition", palette = "jco")
 cohensD( x = d$SNRLullaby, y = d$SNRNonLullaby, method = "paired")
 #0.99298
@@ -22,7 +22,7 @@ t.test(x = d$SNRLullaby, y = d$SNRNonLullaby, paired = TRUE)
 
 #Replicate Bainbridge et al. analysis, adding calculation of pre-registered effect size
 
-hr <- read.csv("IPL_hr_clean.csv")
+hr <- read.csv("../data/IPL_hr_clean.csv")
 
 # mean-based analyses
 hr_lul_means <- hr %>%
