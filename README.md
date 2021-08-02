@@ -1,6 +1,5 @@
 # lullaby-analysis
-Audio files extracted from video stimuli are:
-https://drive.google.com/drive/folders/1mhpbI0-lmcmSjA1RCUvUruKPL9zZp4wt
+Code/data for "Sampling criteria and recording quality of influence relaxation responses to lullabies"
 
 ## Effect size analysis
 Run ./analysis-effectsize/LullabyAudio.R (R)
